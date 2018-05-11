@@ -1,0 +1,166 @@
+<aura:component description="MyOrders" controller="MyOrdersController" implements="force:appHostable">
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+    <aura:attribute name="searchResult" type="List" description="Holds the List of Orders that is Returned"/>
+    <aura:attribute name="userInfo" type="String" description="Holds the current User Name"/>
+    <aura:attribute name="currentDate" type="String" description="Holds the current Date"/>
+
+    <lightning:card title="">
+
+        <!-- / PAGE HEADER -->
+        <lightning:layout class="header-container" horizontalAlign="spread">
+            <lightning:layout class="title-container slds-page-header slds-page-header--object-home"
+                              horizontalAlign="spread">
+                <lightning:layoutItem >
+                    <lightning:icon iconName="standard:work_order" title="My Orders" alternativeText="My Orders"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-small">
+                    <div class="page-section page-header">
+                        <h1 class="slds-text-heading--label">Invoice</h1>
+                        <h2 class="slds-text-heading--medium">My Orders</h2>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <lightning:layout horizontalAlign="end" verticalAlign="center" multipleRows="false">
+                <lightning:layoutItem padding="horizontal-medium">
+                    <div>
+                        <h2 class="slds-text-heading--medium">{!v.userInfo}</h2>
+                        <h1 class="slds-text--small">{!v.currentDate}</h1>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layout>
+        <!-- / PAGE HEADER -->
+
+
+        <!-- Display orders list -->
+        <div class="slds-m-around--large">
+            <span class="slds-badge">Number of Orders: {!v.searchResult.length}
+      </span>
+            <table class="slds-table slds-table--bordered slds-table--
+      striped slds-table--cell-buffer slds-table--fixed-layout">
+                <thead>
+                <tr class="slds-text-heading--label">
+                    <th scope="col">
+                        <div class="slds-truncate" title="Product Name">Product</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="Price">Unit Price</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="Description">Unit Sold</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="Total Inventory">Total Amount</div>
+                    </th>
+                    <th scope="col">
+                        <div class="slds-truncate" title="Card">Order Date</div>
+                    </th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                <aura:iteration items="{!v.searchResult}" var="order"
+                                indexVar="idxOrd">
+
+                    <tr class="invoice">
+                        <td colspan="5">
+                            <aura:if isTrue="{!order.Status__c == 'Open'}">
+                                <div class="slds-text-align--center" data-record="{!idxOrd}"
+                                     onclick="{!c.navigateToProductComponent}"
+                                     onmouseover="" style="cursor: pointer; color: #0040FF;">INVOICE: {!order.Name}
+                                </div>
+
+                                <aura:set attribute="else">
+
+                                    <div class="slds-text-align--center">
+                                        INVOICE: {!order.Name}
+                                    </div>
+
+                                </aura:set>
+                            </aura:if>
+                        </td>
+                    </tr>
+
+                    <aura:iteration items="{!order.Product_Orders__r}" var="item"
+                                    indexVar="idxIt">
+                        <tr>
+                            <td>
+                                <div class="slds-truncate">{!item.Product__r.Name}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">
+                                    <lightning:formattedNumber value="{!item.Unit_Price__c}" style="currency"
+                                                               currencyCode="USD"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!item.Quantity__c}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">
+                                    <lightning:formattedNumber value="{!item.Total_Price__c}" style="currency"
+                                                               currencyCode="USD"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">
+                                    <lightning:formattedDateTime value="{!item.CreatedDate}" year="numeric"
+                                                                 month="numeric"
+                                                                 day="numeric" hour="2-digit"
+                                                                 minute="2-digit" timeZone="UTC" timeZoneName="short"
+                                                                 hour12="false"/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div></div>
+                            </td>
+                            <td>
+                                <div>
+                                    Total amount with discount:
+                                    <lightning:formattedNumber title="Total amount with discount"
+                                                               value="{!item.Total_Price_With_Discount__c}"
+                                                               style="currency"
+                                                               currencyCode="USD"/>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    Discount:
+                                    <lightning:formattedNumber title="Discount"
+                                                               value="{!item.Discount__c/100}" style="percent"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+
+                    <tr class="row-container">
+                        <td colspan="2">
+                            <div class="slds-truncate slds-text-align--center">Status: {!order.Status__c}</div>
+                        </td>
+                        <td colspan="1">
+                            <div class="slds-text-align--center">
+                                Total order: {!order.Name} amount:
+                                <lightning:formattedNumber title="Total order amount"
+                                                           value="{!order.Order_Amount__c}"
+                                                           style="currency"
+                                                           currencyCode="USD"/>
+                            </div>
+                        </td>
+                        <td colspan="2">
+                        </td>
+                    </tr>
+
+                </aura:iteration>
+                </tbody>
+            </table>
+        </div>
+
+    </lightning:card>
+
+</aura:component>

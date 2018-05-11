@@ -1,0 +1,147 @@
+<aura:component description="Products" controller="ProductsController"
+                implements="force:appHostable,force:hasRecordId,lightning:actionOverride">
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+    <!-- Attribute Declaration -->
+
+    <aura:attribute name="searchResult" type="List" description="Holds the List of Items that is Returned"/>
+    <aura:attribute name="count" default="0" type="Integer" description="Holds the number of Products"/>
+    <aura:attribute name="searchCategory" type="List" description="Holds the List of Products Categories"/>
+
+    <aura:attribute name="records" type="List" description="Holds the Sorted List of Products"/>
+    <aura:attribute name="sortAsc" type="Boolean" default="true" description="Holds the Sorting Direction"/>
+    <aura:attribute name="sortField" type="String" description="Holds the Sort Field"/>
+
+    <!-- PAGE HEADER -->
+
+    <lightning:card title="">
+        <lightning:layout class="header-container" horizontalAlign="spread">
+            <lightning:layout class="title-container slds-page-header slds-page-header--object-home"
+                              horizontalAlign="spread">
+                <lightning:layoutItem >
+                    <lightning:icon iconName="standard:product" title="Product Catalog" alternativeText="My Products"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-small">
+                    <div class="page-section page-header">
+                        <h1 class="slds-text-heading--label">Products</h1>
+                        <h2 class="slds-text-heading--medium">My First Shop</h2>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <lightning:layout horizontalAlign="end" verticalAlign="center" multipleRows="false">
+                <lightning:layoutItem padding="horizontal-medium">
+                    <lightning:button label="Submit" title="Submit action" onclick="{! c.submitOrder }"/>
+                    <lightning:button label="My Orders" title="Show My Orders" onclick="{! c.gotoURL }"/>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </lightning:layout>
+        <!-- / PAGE HEADER -->
+
+
+        <!-- Display product catalog -->
+
+        <lightning:layout horizontalAlign="center">
+            <lightning:layoutItem >
+                <div class="slds-m-around--large">
+                    <span class="slds-badge">Number of Products: {!v.count}
+                    </span>
+
+                    <table class="slds-table slds-table--bordered slds-table--
+                                  striped slds-table--cell-buffer slds-table--fixed-layout">
+
+                        <thead>
+                        <tr class="slds-text-heading--label">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Product Name"
+                                     onclick="{!c.sortByName}"
+                                     onmouseover="" style="cursor: pointer;">Product
+                                    <lightning:Icon iconName="{!(v.sortAsc) ? 'utility:arrowdown' : 'utility:arrowup'}"
+                                                    size="xx-small" alternativeText="test"/>
+                                </div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Price">Price</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Description">Description</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Total Inventory">Total Inventory</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Amount">Amount</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate" title="Cart">Cart</div>
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <aura:iteration items="{!v.searchResult}" var="cat"
+                                        indexVar="idxCat">
+
+                            <c:Section title="{!cat.category.Name}" numProducts="{!cat.productItems.length}"
+                                       isShow="{!cat.isShow}">
+
+                                <aura:iteration items="{!cat.productItems}" var="item"
+                                                indexVar="index">
+                                    <tr>
+                                        <td>
+                                            <div class="slds-truncate">{!item.product.Name}</div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate">
+                                                <lightning:formattedNumber value="{!item.product.Price__c}"
+                                                                           style="currency"
+                                                                           currencyCode="USD"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-cell-wrap">{!item.product.Description__c}</div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate">{!item.product.Total_Inventory__c}</div>
+                                        </td>
+                                        <td>
+                                            <div class="amountInput slds-truncate">
+                                                <lightning:input aura:id="myinput" type="number" name="input1"
+                                                                 value="{!item.total}"
+                                                                 max="{!item.product.Total_Inventory__c > 20 ? 20 : item.product.Total_Inventory__c}"
+                                                                 min="1"
+                                                                 variant="label-hidden"
+                                                                 disabled="{!!item.state}"/>
+
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <aura:if isTrue="{!item.state}">
+                                                <button data-index1="{!idxCat}" data-index2="{!index}"
+                                                        class="slds-button slds-button_neutral"
+                                                        title="Add Product"
+                                                        onclick="{!c.addToCart}">Add
+                                                </button>
+                                                <aura:set attribute="else">
+                                                    <button data-index1="{!idxCat}" data-index2="{!index}"
+                                                            class="slds-button slds-button_brand"
+                                                            title="Remove Product"
+                                                            onclick="{!c.removeFromCart}">Remove
+                                                    </button>
+                                                </aura:set>
+                                            </aura:if>
+                                        </td>
+                                    </tr>
+                                </aura:iteration>
+
+                            </c:Section>
+
+                        </aura:iteration>
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </lightning:card>
+</aura:component>

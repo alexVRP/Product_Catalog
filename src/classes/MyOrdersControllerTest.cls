@@ -1,0 +1,46 @@
+
+@isTest
+private class MyOrdersControllerTest {
+
+
+    @isTest
+    static void test_getOrders() {
+
+        Order__c order = new Order__c(Status__c = 'Open');
+        insert order;
+
+        Product__c product = new Product__c(Name = 'Test Product',
+                Description__c = 'Test Description', Price__c = 10, Total_Inventory__c = 5);
+        insert product;
+
+        Product_Order__c productOrder = new Product_Order__c(Product__c = product.Id,
+                Order__c = order.Id, Quantity__c = 2);
+        insert productOrder;
+
+        Test.startTest();
+
+        List<Order__c> lstOrderResult = new List<Order__c>{
+        };
+
+        lstOrderResult = MyOrdersController.getOrders();
+        system.debug('=================== ' + lstOrderResult);
+        System.assertNotEquals(null, lstOrderResult);
+
+        Test.stopTest();
+
+    }
+
+    @isTest
+    static void test_getUserName() {
+        String user;
+
+        Test.startTest();
+
+        user = MyOrdersController.fetchUserName();
+        system.debug('=================== ' + user);
+        System.assertNotEquals(null, user);
+
+        Test.stopTest();
+
+    }
+}

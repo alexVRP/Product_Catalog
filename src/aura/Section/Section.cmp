@@ -1,0 +1,36 @@
+<aura:component description="Section">
+
+    <aura:attribute name="title" type="String" access="public"/>
+    <aura:attribute name="numProducts" type="Integer" access="public"/>
+    <aura:attribute name="isShow" type="Boolean" default="{!false}" access="public"/>
+
+    <tr>
+        <td colspan="6">
+            <lightning:layout class="category slds-page-header slds-page-header--object-home">
+                <lightning:layoutItem >
+                    <lightning:buttonIcon iconName="{!(!v.isShow) ? 'utility:chevronright' : 'utility:chevrondown'}"
+                                          variant="bare" size="large" alternativeText="test"
+                                          onclick="{!c.onIconClick}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="horizontal-large">
+                    <div class="page-section page-header">
+                        <h1 class="slds-text-heading--small">{!v.title}</h1>
+                        <aura:if isTrue="{!v.numProducts}">
+                        <span class="slds-badge slds-theme--inverse">Products: {!v.numProducts}
+                        </span>
+                            <aura:set attribute="else">
+                                <span class="slds-badge">Products: {!v.numProducts}
+                        </span>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </td>
+    </tr>
+    <aura:if isTrue="{!v.isShow}">
+        {!v.body}
+    </aura:if>
+
+
+</aura:component>
