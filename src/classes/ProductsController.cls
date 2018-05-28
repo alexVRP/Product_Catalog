@@ -44,27 +44,17 @@ public with sharing class ProductsController {
             productOrdersMap.put(productOrder.Product__c, productOrder.Quantity__c.intValue());
         }
 
-        if (recordId != null) {
-            for (Category__c category : [
-                    SELECT Id, Name, (
-                            SELECT Product__r.Name, Product__r.Description__c, Product__r.Price__c, Product__r.Total_Inventory__c
-                            FROM Product_Categories__r
-                    )
-                    FROM Category__c
-            ]) {
-                result.add(new CategoryResult(category, productOrdersMap));
-            }
-        } else {
-            for (Category__c category : [
-                    SELECT Id, Name, (
-                            SELECT Product__r.Name, Product__r.Description__c, Product__r.Price__c, Product__r.Total_Inventory__c
-                            FROM Product_Categories__r
-                    )
-                    FROM Category__c
-            ]) {
-                result.add(new CategoryResult(category, productOrdersMap));
-            }
+
+        for (Category__c category : [
+                SELECT Id, Name, (
+                        SELECT Product__r.Name, Product__r.Description__c, Product__r.Price__c, Product__r.Total_Inventory__c
+                        FROM Product_Categories__r
+                )
+                FROM Category__c
+        ]) {
+            result.add(new CategoryResult(category, productOrdersMap));
         }
+
         return JSON.serialize(result);
     }
 
@@ -72,14 +62,11 @@ public with sharing class ProductsController {
     @AuraEnabled
     public static Id addProduct(Id productId, Id recordId, Integer total) {
 
-        Order__c order;
+        Order__c order = recordId != null ? [SELECT Id FROM Order__c WHERE Id = :recordId] : new Order__c();
 
-        if (recordId != null) {
-            order = [SELECT Id FROM Order__c WHERE Id = :recordId];
-        } else {
-            order = new Order__c();
+        if (recordId == null) {
             try {
-                if (Schema.sObjectType.Order__c.isCreateable())
+                if (Schema.SObjectType.Order__c.isCreateable())
                     insert order;
             } catch (DmlException e) {
                 throw new AuraHandledException('Unable to create record: ' + e.getMessage());
@@ -87,11 +74,9 @@ public with sharing class ProductsController {
             }
         }
 
-
-        Product_Order__c productOrder = new Product_Order__c(Product__c = productId, Order__c = order.id, Quantity__c = total);
         try {
-            if (Schema.sObjectType.Order__c.isCreateable())
-                insert productOrder;
+            if (Schema.SObjectType.Order__c.isCreateable())
+                insert new Product_Order__c(Product__c = productId, Order__c = order.Id, Quantity__c = total);
         } catch (DmlException e) {
             throw new AuraHandledException('Unable to create record: ' + e.getMessage());
 //            System.debug(e.getMessage());
@@ -103,16 +88,14 @@ public with sharing class ProductsController {
     @AuraEnabled
     public static Id removeProduct(Id productId, Id recordId) {
 
-        List<Product_Order__c> lstProductOrdersToDelete = [
-                SELECT Id, Product__c, Order__c
-                FROM Product_Order__c
-                WHERE Product__c = :productId
-                AND Order__c = :recordId
-        ];
-
         try {
-            if (Schema.sObjectType.Order__c.isDeletable())
-                delete lstProductOrdersToDelete;
+            if (Schema.SObjectType.Order__c.isDeletable())
+                delete [
+                        SELECT Id, Product__c, Order__c
+                        FROM Product_Order__c
+                        WHERE Product__c = :productId
+                        AND Order__c = :recordId
+                ];
         } catch (DmlException e) {
             throw new AuraHandledException('Unable to delete record: ' + e.getMessage());
 //            System.debug(e.getMessage());
@@ -124,18 +107,16 @@ public with sharing class ProductsController {
                 WHERE Order__c = :recordId
         ];
 
-        if (lstProductOrdersToCheck != null && !lstProductOrdersToCheck.isEmpty()) {
+        if (!lstProductOrdersToCheck.isEmpty()) {
             return recordId;
         } else {
-            List<Order__c> lstOrdersToDelete = [
-                    SELECT Id
-                    FROM Order__c
-                    WHERE Id = :recordId
-            ];
             try {
-                if (Schema.sObjectType.Order__c.isDeletable()) {
-                    delete lstOrdersToDelete;
-                    return null;
+                if (Schema.SObjectType.Order__c.isDeletable()) {
+                    delete [
+                            SELECT Id
+                            FROM Order__c
+                            WHERE Id = :recordId
+                    ];
                 }
             } catch (DmlException e) {
                 throw new AuraHandledException('Unable to delete record: ' + e.getMessage());
@@ -149,16 +130,14 @@ public with sharing class ProductsController {
     public static void submitOrderApproval(Id recordId) {
         System.debug(recordId);
 
-        List<Order__c> lstOrdersToApprove = [
-                SELECT Id, Status__c
-                FROM Order__c
-                WHERE Id = :recordId
-        ];
-
         try {
-            for (Order__c order : lstOrdersToApprove) {
+            for (Order__c order : [
+                    SELECT Id, Status__c
+                    FROM Order__c
+                    WHERE Id = :recordId
+            ]) {
                 order.Status__c = 'Pending';
-                if (Schema.sObjectType.Order__c.isUpdateable())
+                if (Schema.SObjectType.Order__c.isUpdateable())
                     update order;
                 System.debug(order.Status__c);
             }

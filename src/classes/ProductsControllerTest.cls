@@ -1,8 +1,7 @@
-
-@isTest
+@IsTest
 private class ProductsControllerTest {
 
-    @isTest
+    @IsTest
     static void test_getProducts() {
 
         Category__c testCategory = new Category__c(Name = 'Test Category');
@@ -31,20 +30,20 @@ private class ProductsControllerTest {
         Id id;
 
         lstCategoryResult = ProductsController.getCategory(id);
-        system.debug('=================== ' + lstCategoryResult);
+        System.debug('=================== ' + lstCategoryResult);
         System.assertNotEquals(null, lstCategoryResult);
 
         Id recordId = testOrder.Id;
 
         lstCategoryResult = ProductsController.getCategory(recordId);
-        system.debug('=================== ' + lstCategoryResult);
+        System.debug('=================== ' + lstCategoryResult);
         System.assertNotEquals(null, lstCategoryResult);
 
         Test.stopTest();
     }
 
 
-    @isTest
+    @IsTest
     static void test_addProduct() {
 
         Order__c testOrder = new Order__c();
@@ -70,7 +69,7 @@ private class ProductsControllerTest {
         Test.stopTest();
     }
 
-    @isTest
+    @IsTest
     static void test_removeProduct() {
 
         Order__c testOrder1 = new Order__c();
@@ -97,17 +96,17 @@ private class ProductsControllerTest {
 
         Test.startTest();
 
-        Id id;
-        id = ProductsController.removeProduct(productId1, recordId);
-        System.assertNotEquals(null, id);
+        Id recordId1 = ProductsController.removeProduct(productId1, recordId);
 
-        id = ProductsController.removeProduct(productId2, recordId);
-        System.assertEquals(null, id);
+        Id recordId2 = ProductsController.removeProduct(productId2, recordId);
 
         Test.stopTest();
+
+        System.assertNotEquals(null, recordId1);
+        System.assertEquals(null, recordId2);
     }
 
-    @isTest
+    @IsTest
     static void test_submitOrderApproval() {
 
         Order__c testOrder = new Order__c();

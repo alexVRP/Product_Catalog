@@ -23,7 +23,7 @@
                 </lightning:layoutItem>
                 <lightning:layoutItem padding="horizontal-small">
                     <div class="page-section page-header">
-                        <h1 class="slds-text-heading--label">Products</h1>
+                        <h1 class="slds-text-heading--label slds-line-height--reset">Products</h1>
                         <h2 class="slds-text-heading--medium">My First Shop</h2>
                     </div>
                 </lightning:layoutItem>
@@ -42,7 +42,7 @@
 
         <lightning:layout horizontalAlign="center">
             <lightning:layoutItem >
-                <div class="slds-m-around--large">
+                <div class="slds-m-around--large slds-m-bottom--none">
                     <span class="slds-badge">Number of Products: {!v.count}
                     </span>
 
@@ -106,6 +106,7 @@
                                         <td>
                                             <div class="amountInput slds-truncate">
                                                 <lightning:input aura:id="myinput" type="number" name="input1"
+                                                                 label=""
                                                                  value="{!item.total}"
                                                                  max="{!item.product.Total_Inventory__c > 20 ? 20 : item.product.Total_Inventory__c}"
                                                                  min="1"
@@ -140,8 +141,17 @@
                         </tbody>
 
                     </table>
+
+                    <!-- FOOTER -->
+                    <footer role="contentinfo" class="slds-p-top--small">
+                        <div class="slds-grid slds-grid--align-end">
+                            <p class="slds-col">&copy; Alexey Ataev, 2018</p>
+                        </div>
+                    </footer>
+
                 </div>
             </lightning:layoutItem>
         </lightning:layout>
+
     </lightning:card>
 </aura:component>

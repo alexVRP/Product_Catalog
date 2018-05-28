@@ -6,7 +6,7 @@
     <aura:attribute name="currentDate" type="String" description="Holds the current Date"/>
 
     <lightning:card title="">
-
+        
         <!-- / PAGE HEADER -->
         <lightning:layout class="header-container" horizontalAlign="spread">
             <lightning:layout class="title-container slds-page-header slds-page-header--object-home"
@@ -16,7 +16,7 @@
                 </lightning:layoutItem>
                 <lightning:layoutItem padding="horizontal-small">
                     <div class="page-section page-header">
-                        <h1 class="slds-text-heading--label">Invoice</h1>
+                        <h1 class="slds-text-heading--label slds-line-height--reset">Invoice</h1>
                         <h2 class="slds-text-heading--medium">My Orders</h2>
                     </div>
                 </lightning:layoutItem>
@@ -34,7 +34,7 @@
 
 
         <!-- Display orders list -->
-        <div class="slds-m-around--large">
+        <div class="slds-m-around--large slds-m-bottom--none">
             <span class="slds-badge">Number of Orders: {!v.searchResult.length}
       </span>
             <table class="slds-table slds-table--bordered slds-table--
@@ -159,6 +159,14 @@
                 </aura:iteration>
                 </tbody>
             </table>
+
+            <!-- FOOTER -->
+            <footer role="contentinfo" class="slds-p-top--small">
+                <div class="slds-grid slds-grid--align-end">
+                    <p class="slds-col">&copy; Alexey Ataev, 2018</p>
+                </div>
+            </footer>
+
         </div>
 
     </lightning:card>

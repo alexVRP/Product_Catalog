@@ -4,9 +4,9 @@
     <option name="connections">
       <list>
         <IlluminatedCloudConnection>
-          <option name="connectionName" value="Product Catalog Temp" />
+          <option name="connectionName" value="Product Catalog" />
           <option name="defaultModuleName" value="Product Catalog Temp" />
-          <option name="offlineSymbolTablePath" value="$PROJECT_DIR$/IlluminatedCloud/Product_Catalog_Temp/OfflineSymbolTable.zip" />
+          <option name="offlineSymbolTablePath" value="$PROJECT_DIR$/IlluminatedCloud/Product_Catalog/OfflineSymbolTable.zip" />
         </IlluminatedCloudConnection>
       </list>
     </option>

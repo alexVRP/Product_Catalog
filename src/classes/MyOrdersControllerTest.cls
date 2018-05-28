@@ -1,9 +1,8 @@
-
-@isTest
+@IsTest
 private class MyOrdersControllerTest {
 
 
-    @isTest
+    @IsTest
     static void test_getOrders() {
 
         Order__c order = new Order__c(Status__c = 'Open');
@@ -19,28 +18,30 @@ private class MyOrdersControllerTest {
 
         Test.startTest();
 
-        List<Order__c> lstOrderResult = new List<Order__c>{
-        };
+        List<Order__c> lstOrderResult = new List<Order__c>();
 
         lstOrderResult = MyOrdersController.getOrders();
-        system.debug('=================== ' + lstOrderResult);
-        System.assertNotEquals(null, lstOrderResult);
 
         Test.stopTest();
 
+        System.debug('=================== ' + lstOrderResult);
+        System.assertNotEquals(null, lstOrderResult);
+
     }
 
-    @isTest
+    @IsTest
     static void test_getUserName() {
         String user;
 
         Test.startTest();
 
         user = MyOrdersController.fetchUserName();
-        system.debug('=================== ' + user);
-        System.assertNotEquals(null, user);
 
         Test.stopTest();
+
+        System.debug('=================== ' + user);
+        System.assertNotEquals(null, user);
+
 
     }
 }
