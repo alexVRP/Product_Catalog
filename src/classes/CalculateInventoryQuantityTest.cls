@@ -2,9 +2,9 @@
  * Created by ataeva on 25.05.2018.
  */
 
-@IsTest
+@isTest
 private class CalculateInventoryQuantityTest {
-    @IsTest
+    @isTest
     static void test_calculateInventory() {
 
         Order__c order = new Order__c(Status__c = 'Open');

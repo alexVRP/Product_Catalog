@@ -1,8 +1,8 @@
-@IsTest
+@isTest
 private class MyOrdersControllerTest {
 
 
-    @IsTest
+    @isTest
     static void test_getOrders() {
 
         Order__c order = new Order__c(Status__c = 'Open');
@@ -29,7 +29,7 @@ private class MyOrdersControllerTest {
 
     }
 
-    @IsTest
+    @isTest
     static void test_getUserName() {
         String user;
 

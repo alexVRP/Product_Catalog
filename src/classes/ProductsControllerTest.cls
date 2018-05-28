@@ -1,7 +1,7 @@
-@IsTest
+@isTest
 private class ProductsControllerTest {
 
-    @IsTest
+    @isTest
     static void test_getProducts() {
 
         Category__c testCategory = new Category__c(Name = 'Test Category');
@@ -43,7 +43,7 @@ private class ProductsControllerTest {
     }
 
 
-    @IsTest
+    @isTest
     static void test_addProduct() {
 
         Order__c testOrder = new Order__c();
@@ -69,7 +69,7 @@ private class ProductsControllerTest {
         Test.stopTest();
     }
 
-    @IsTest
+    @isTest
     static void test_removeProduct() {
 
         Order__c testOrder1 = new Order__c();
@@ -106,7 +106,7 @@ private class ProductsControllerTest {
         System.assertEquals(null, recordId2);
     }
 
-    @IsTest
+    @isTest
     static void test_submitOrderApproval() {
 
         Order__c testOrder = new Order__c();
