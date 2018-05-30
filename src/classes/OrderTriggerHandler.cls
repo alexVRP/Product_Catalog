@@ -1,12 +1,11 @@
+public with sharing class OrderTriggerHandler {
 
-trigger CalculateInventoryQuantity on Order__c (after insert, after update) {
+    public static void handleAfterInsertUpdate(List<Order__c> orders, Map<Id, Order__c> ObjectMap) {
+        Set<Id> ordIds = new Set<Id>();
+        Set<Id> prodIds = new Set<Id>();
 
-    Set<Id> ordIds = new Set<Id>();
-    Set<Id> prodIds = new Set<Id>();
-
-    if (Trigger.isUpdate || Trigger.isInsert) {
-        for (Order__c order : Trigger.new) {
-            if (Trigger.newMap.get(order.Id).Status__c == 'Closed') {
+        for (Order__c order : orders) {
+            if (ObjectMap.get(order.Id).Status__c == 'Closed') {
                 ordIds.add(order.Id);
             }
         }
@@ -33,4 +32,3 @@ trigger CalculateInventoryQuantity on Order__c (after insert, after update) {
         update mapProducts.values();
     }
 }
-

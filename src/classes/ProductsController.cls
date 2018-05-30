@@ -66,7 +66,7 @@ public with sharing class ProductsController {
 
         if (recordId == null) {
             try {
-                if (Schema.SObjectType.Order__c.isCreateable())
+                if (Schema.sObjectType.Order__c.isCreateable())
                     insert order;
             } catch (DmlException e) {
                 throw new AuraHandledException('Unable to create record: ' + e.getMessage());
@@ -75,8 +75,8 @@ public with sharing class ProductsController {
         }
 
         try {
-            if (Schema.SObjectType.Order__c.isCreateable())
-                insert new Product_Order__c(Product__c = productId, Order__c = order.Id, Quantity__c = total);
+            if (Schema.sObjectType.Order__c.isCreateable())
+                insert new Product_Order__c(Product__c = productId, Order__c = order.id, Quantity__c = total);
         } catch (DmlException e) {
             throw new AuraHandledException('Unable to create record: ' + e.getMessage());
 //            System.debug(e.getMessage());
@@ -89,7 +89,7 @@ public with sharing class ProductsController {
     public static Id removeProduct(Id productId, Id recordId) {
 
         try {
-            if (Schema.SObjectType.Order__c.isDeletable())
+            if (Schema.sObjectType.Order__c.isDeletable())
                 delete [
                         SELECT Id, Product__c, Order__c
                         FROM Product_Order__c
@@ -111,7 +111,7 @@ public with sharing class ProductsController {
             return recordId;
         } else {
             try {
-                if (Schema.SObjectType.Order__c.isDeletable()) {
+                if (Schema.sObjectType.Order__c.isDeletable()) {
                     delete [
                             SELECT Id
                             FROM Order__c
@@ -137,7 +137,7 @@ public with sharing class ProductsController {
                     WHERE Id = :recordId
             ]) {
                 order.Status__c = 'Pending';
-                if (Schema.SObjectType.Order__c.isUpdateable())
+                if (Schema.sObjectType.Order__c.isUpdateable())
                     update order;
                 System.debug(order.Status__c);
             }

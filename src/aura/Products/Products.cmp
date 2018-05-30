@@ -106,7 +106,6 @@
                                         <td>
                                             <div class="amountInput slds-truncate">
                                                 <lightning:input aura:id="myinput" type="number" name="input1"
-                                                                 label=""
                                                                  value="{!item.total}"
                                                                  max="{!item.product.Total_Inventory__c > 20 ? 20 : item.product.Total_Inventory__c}"
                                                                  min="1"

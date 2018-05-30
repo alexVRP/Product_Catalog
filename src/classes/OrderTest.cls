@@ -1,11 +1,9 @@
-/**
- * Created by ataeva on 25.05.2018.
- */
+
 
 @isTest
-private class CalculateInventoryQuantityTest {
+private class OrderTest {
     @isTest
-    static void test_calculateInventory() {
+    static void test_handleAfterInsertUpdate() {
 
         Order__c order = new Order__c(Status__c = 'Open');
         insert order;
